@@ -105,13 +105,77 @@ export default function Home() {
   };
 
   return (
-    <div>
-    <button
-      onClick={proverAddressMembership}
-      className="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-    >
-      Prove Address Membership
-    </button>
+    <div class="bg-gray-100">
+    <header class="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 text-white py-20">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4">ZKPfightAI</h1>
+            <p class="text-2xl">A secure and efficient way to differentiate between authentic human-created digital content and AI-generated fakes.</p>
+        </div>
+    </header>
+    <section class="container mx-auto px-4 py-6">
+        <h2 class="text-3xl font-bold mb-6">What is ZKECDSA?</h2>
+        <p>
+          Spartan-ECDSA (Zero-Knowledge ECDSA) is a cryptographic protocol that allows a prover to demonstrate the knowledge of a private key or ETH address without revealing any information about that key ot address itself.
+          <b> It is the fastest open-source method to verify secp256k1 ECDSA signatures in zero-knowledge. </b>
+          It can be used in hardware devices such as microphones and cameras to prevent misinformation. Or it can be used in a consumer app like this.
+        </p>
+    </section>
+    <section class="container mx-auto px-4 py-6">
+      <h2 class="text-3xl font-bold mb-8">Steps to Create and Verify Proof</h2>
+      <div class="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
+        <div class="bg-white shadow rounded-lg p-6">
+          <h3 class="text-xl font-bold mb-4">Step 1</h3>
+          <p>Paste the URL to the asset, such as a podcast or image, into the form below.</p>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6">
+          <h3 class="text-xl font-bold mb-4">Step 2</h3>
+          <p>Create a name and description for your asset.</p>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6">
+          <h3 class="text-xl font-bold mb-4">Step 3</h3>
+          <p>Press the "Create Proof" button to generate a cryptographic proof.</p>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6">
+          <h3 class="text-xl font-bold mb-4">Step 4</h3>
+          <p>Add the URL to the proof under your asset on the podcast or image page.</p>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6">
+          <h3 class="text-xl font-bold mb-4">Step 5</h3>
+          <p>Now anyone can verify your proof in their browser, ensuring the authenticity and integrity of your asset.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="container mx-auto px-4 py-8 bg-white shadow rounded-lg">
+      <h2 class="text-3xl font-bold mb-6">Create a Proof Using ETH Address</h2>
+          <div class="mb-6">
+              <label class="block mb-2">URL of verified asset</label>
+              <input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="Enter URL" />
+          </div>
+          <div class="mb-6">
+              <label class="block mb-2">Name of proof</label>
+              <input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="Enter Name" />
+          </div>
+          <div class="mb-6">
+              <label class="block mb-2">Description</label>
+              <textarea class="w-full p-2 border border-gray-300 rounded" rows="4" placeholder="Enter Description"></textarea>
+          </div>
+          <button onClick={proverAddressMembership} class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Create Proof</button>
+    </section>
+    <section class="container mx-auto px-4 py-16">
+        <h2 class="text-3xl font-bold mb-6">Proofs</h2>
+        <table class="w-full bg-white shadow rounded-lg">
+            <thead class="bg-gray-200">
+                <tr>
+                  <th class="px-4 py-2">URL</th>
+                  <th class="px-4 py-2">Name</th>
+                  <th class="px-4 py-2">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </section>
     </div>
   );
 }
