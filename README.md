@@ -20,6 +20,13 @@ Hardware devices, such as cameras and phones, could have private keys uploaded t
 
 Hosting proofs and verifying them on-chain is a trustless way for anyone to confirm the source of information. As artificial intelligence becomes more advanced, blockchain with ZKP will play a significant role in preventing deep-fakes and misinformation. ZKP that run fast on user and resource-constrained devices will play a prominent role in protecting against fakes.
 
+## Future work
+
+- Reduce the number of Keccak constraints to improve the speed of Ethereum address signing.
+- Investigate wrapping the final proof to make it smaller.
+- Investigate making a proof of all of the proves created.
+- Make an API that allows for more conditional constraints about the user account. (hasNFT, hasBalance, etc)
+
 ## Node.js
 
 Recommended: v18 or later
