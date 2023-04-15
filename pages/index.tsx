@@ -11,7 +11,7 @@ _______  _        _______  _______ _________ _______          _________   ______
 By Wyatt at ETHTOKYO 2023.
 */
 
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   MembershipProver,
   MembershipVerifier,
@@ -33,13 +33,50 @@ import {
 
 export default function Home() {
 
+  const privateKey = Buffer.from("".padStart(16, "🐱"), "utf16le");
+  const [proverAddressString, setProverAddressString] = useState("0x" + privateToAddress(privateKey).toString("hex"));
+
+  const getProverAddress = async () => {
+    if (typeof window.ethereum !== "undefined") {
+      try {
+        const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+        const account = accounts[0];
+        console.log("Connected account:", account);
+      } catch (error) {
+        console.error("User denied account access");
+      }
+    } else {
+      console.log("MetaMask is not installed");
+    }
+  }
+
+  useEffect(() => {
+      async function getProverAddress() {
+          if (typeof window.ethereum !== "undefined") {
+              try {
+                const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+                const account = accounts[0];
+                setProverAddressString(account);
+              } catch (error) {
+                console.error("User denied account access");
+              }
+          } else {
+              console.log("MetaMask is not installed");
+          }
+      }
+
+      getProverAddress();
+  }, []);
+
   const proverAddressMembership = async () => {
-      const privateKey = Buffer.from("".padStart(16, "🐱"), "utf16le");
-      const message = Buffer.from("harry potter");
+
+      const message = Buffer.from("I am human");
       const messageHash = hashPersonalMessage(message);
 
-      const { v, r, s } = ecsign(messageHash, privateKey);
-      const signature = `0x${r.toString("hex")}${s.toString("hex")}${v.toString(16)}`;
+      const signature = await window.ethereum.request({
+        method: "personal_sign",
+        params: ["I am human", proverAddressString],
+      });
 
       const hasher = new Poseidon();
       await hasher.initWasm();
@@ -47,10 +84,7 @@ export default function Home() {
       const depth = 20;
       const addressTree = new Tree(depth, hasher);
 
-      const proverAddress = BigInt(
-        "0x" + privateToAddress(privateKey).toString("hex")
-      );
-      addressTree.insert(proverAddress);
+      addressTree.insert(BigInt(proverAddressString));
 
       for (const member of ["🐻", "🐶", "🐼"]) {
         const key = privateToPublic(
@@ -60,11 +94,10 @@ export default function Home() {
         addressTree.insert(address);
       }
 
-      const idx = addressTree.indexOf(proverAddress);
+      const idx = addressTree.indexOf(BigInt(proverAddressString));
       const proof = addressTree.createProof(idx);
 
       console.log("Proving...");
-      console.time("Full proving time");
 
       const membershipProver = new MembershipProver({
         ...defaultAddressMembershipPConfig,
@@ -85,6 +118,8 @@ export default function Home() {
         zkProof.length,
         "bytes"
       );
+
+      return;
 
       console.log("Verifying...");
       const membershipVerifier = new MembershipVerifier({
@@ -116,8 +151,9 @@ export default function Home() {
         <h2 class="text-3xl font-bold mb-6">What is ZKECDSA?</h2>
         <p>
           Spartan-ECDSA (Zero-Knowledge ECDSA) is a cryptographic protocol that allows a prover to demonstrate the knowledge of a private key or ETH address without revealing any information about that key ot address itself.
-          <b> It is the fastest open-source method to verify secp256k1 ECDSA signatures in zero-knowledge. </b>
+          ECDSA is used in Ethereum and Bitcoin. <b> Spartan-ECDSA is the fastest open-source method to verify secp256k1 ECDSA signatures in zero-knowledge. </b>
           It can be used in hardware devices such as microphones and cameras to prevent misinformation. Or it can be used in a consumer app like this.
+          This app allows you to create ZK-badges for your content proving that they are human-created.
         </p>
     </section>
     <section class="container mx-auto px-4 py-6">
@@ -147,7 +183,7 @@ export default function Home() {
     </section>
 
     <section class="container mx-auto px-4 py-8 bg-white shadow rounded-lg">
-      <h2 class="text-3xl font-bold mb-6">Create a Proof Using ETH Address</h2>
+      <h2 class="text-3xl font-bold mb-6">Create a Proof Using ETH Address <span class="text-lg font-bold mb-6">({proverAddressString})</span></h2>
           <div class="mb-6">
               <label class="block mb-2">URL of verified asset</label>
               <input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="Enter URL" />
