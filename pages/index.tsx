@@ -67,9 +67,11 @@ export default function Home() {
                 const account = accounts[0];
                 setProverAddressString(account);
               } catch (error) {
+                alert('Open Metamask extension or refresh');
                 console.error("User denied account access");
               }
           } else {
+              alert('Open Metamask extension or refresh');
               console.log("MetaMask is not installed");
           }
       }
@@ -320,7 +322,7 @@ export default function Home() {
     <section className="container mx-auto px-4 py-8 bg-white shadow rounded-lg">
       <h2 className="text-3xl font-bold mb-6">Create a Proof <span className="text-lg font-bold mb-6">({proverAddressString})</span></h2>
           <div className="mb-6">
-              <label className="block mb-2">URL of verified asset</label>
+              <label className="block mb-2">URL of asset that you want to verify</label>
               <input
                 type="text"
                 value={url}
@@ -403,6 +405,8 @@ export default function Home() {
             )}
             {isLoadingMessage}
           </button>
+          <p className="text-md mt-2">*In demo mode use the private key version first. It is fast!</p>
+          <p className="text-md mt-2">*Depending on your machine ETH address may take up to 60s~ for proving.</p>
     </section>
     <section className="container mx-auto px-4 py-16">
         <h2 className="text-3xl font-bold mb-6">Proofs</h2>
